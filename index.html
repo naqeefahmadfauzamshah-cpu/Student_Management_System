@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <script>
+    // Check login on page load
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <header>Student Registration System</header>
+
+  <nav>
+    <a href="index.html" class="active">Dashboard</a>
+    <a href="register.html">Register Student</a>
+    <a href="students.html">Student List</a>
+    <a href="timetable.html">Timetable</a>
+    <a href="#" id="logoutBtn" class="logout-link">Logout</a>
+  </nav>
+
+  <div class="container" style="text-align:center;">
+    <h2>Welcome to the Student Registration System Dashboard</h2>
+    <p>Use the navigation above to manage registrations, view students, and see timetables.</p>
+  </div>
+
+  <footer>© 2025 university student portal</footer>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('loggedIn');
+      alert('You have been logged out.');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

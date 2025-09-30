@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration System - Timetable</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <script>
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <header>Student Registration System</header>
+
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="register.html">Register Student</a>
+    <a href="students.html">Student List</a>
+    <a href="timetable.html" class="active">Timetable</a>
+    <a href="#" id="logoutBtn" class="logout-link">Logout</a>
+  </nav>
+
+  <div class="container">
+    <h2>Timetable</h2>
+
+    <label for="courseSelect">Select Course:</label>
+    <select id="courseSelect" required>
+      <option value="" disabled selected>Select course</option>
+      <option value="cyber">Diploma in Cyber Security</option>
+      <option value="multimedia">Diploma in Creative Multimedia</option>
+      <option value="software">Diploma in Software Engineering</option>
+    </select>
+
+    <table id="timetableTable" aria-label="Timetable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+        </tr>
+      </thead>
+      <tbody id="timetableBody">
+        <!-- Timetable rows inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer>© 2025 university student portal</footer>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('loggedIn');
+      alert('You have been logged out.');
+      window.location.href = 'login.html';
+    });
+
+    const timetableData = {
+      cyber: {
+        "9:00 - 10:00": { Mon: "Network Security", Tue: "Cryptography", Wed: "Cyber Law", Thu: "Ethical Hacking", Fri: "Malware Analysis" },
+        "10:15 - 11:15": { Mon: "Firewalls", Tue: "Intrusion Detection", Wed: "Penetration Testing", Thu: "Forensics", Fri: "Security Policies" },
+        "11:30 - 12:30": { Mon: "VPN", Tue: "Risk Management", Wed: "Secure Coding", Thu: "Threat Modeling", Fri: "Incident Response" }
+      },
+      multimedia: {
+        "9:00 - 10:00": { Mon: "Graphic Design", Tue: "Video Editing", Wed: "Animation", Thu: "Photography", Fri: "UI/UX Design" },
+        "10:15 - 11:15": { Mon: "Sound Design", Tue: "3D Modeling", Wed: "Web Design", Thu: "Motion Graphics", Fri: "Creative Writing" },
+        "11:30 - 12:30": { Mon: "Digital Illustration", Tue: "Visual Effects", Wed: "Storyboarding", Thu: "Game Design", Fri: "Advertising" }
+      },
+      software: {
+        "9:00 - 10:00": { Mon: "Programming Basics", Tue: "Data Structures", Wed: "Algorithms", Thu: "Databases", Fri: "Software Testing" },
+        "10:15 - 11:15": { Mon: "Web Development", Tue: "Mobile Apps", Wed: "Cloud Computing", Thu: "APIs", Fri: "DevOps" },
+        "11:30 - 12:30": { Mon: "OOP", Tue: "Design Patterns", Wed: "Agile", Thu: "Version Control", Fri: "Microservices" }
+      }
+    };
+
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
+    function renderTable(courseKey) {
+      const tbody = document.getElementById('timetableBody');
+      tbody.innerHTML = '';
+
+      const courseSchedule = timetableData[courseKey];
+      if (!courseSchedule) {
+        document.getElementById('timetableTable').style.display = 'none';
+        return;
+      }
+
+      for (const time in courseSchedule) {
+        const tr = document.createElement('tr');
+
+        // Time column
+        const timeTd = document.createElement('td');
+        timeTd.textContent = time;
+        timeTd.style.fontWeight = '700';
+        tr.appendChild(timeTd);
+
+        // Days columns
+        days.forEach(day => {
+          const td = document.createElement('td');
+          const subject = courseSchedule[time][day];
+          td.textContent = subject || '-';
+          if (!subject) td.classList.add('empty');
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      }
+      document.getElementById('timetableTable').style.display = 'table';
+    }
+
+    document.getElementById('courseSelect').addEventListener('change', function () {
+      renderTable(this.value);
+    });
+  </script>
+</body>
+</html>

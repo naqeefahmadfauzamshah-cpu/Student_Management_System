@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration System - Register Student</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <script>
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <header>Student Registration System</header>
+
+  <nav>
+    <a href="index.html">Dashboard</a>
+    <a href="register.html" class="active">Register Student</a>
+    <a href="students.html">Student List</a>
+    <a href="timetable.html">Timetable</a>
+    <a href="#" id="logoutBtn" class="logout-link">Logout</a>
+  </nav>
+
+  <div class="container">
+    <h2>Register Student</h2>
+
+    <form id="registerForm" novalidate>
+      <label for="studentId">Student ID</label>
+      <input type="text" id="studentId" name="studentId" placeholder="e.g., S1234567" required />
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter full name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter email" required />
+
+      <label for="course">Course</label>
+      <select id="course" name="course" required>
+        <option value="" disabled selected>Select course</option>
+        <option value="Diploma in Cyber Security">Diploma in Cyber Security</option>
+        <option value="Diploma in Creative Multimedia">Diploma in Creative Multimedia</option>
+        <option value="Diploma in Software Engineering">Diploma in Software Engineering</option>
+      </select>
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <footer>© 2025 university student portal</footer>
+
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('loggedIn');
+      alert('You have been logged out.');
+      window.location.href = 'login.html';
+    });
+
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const studentId = form.studentId.value.trim();
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const course = form.course.value;
+
+      if (!studentId || !name || !email || !course) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      // Email validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email.');
+        return;
+      }
+
+      // Save student data in localStorage
+      let students = JSON.parse(localStorage.getItem('students')) || [];
+
+      // Check duplicate studentId
+      if (students.some(s => s.studentId.toLowerCase() === studentId.toLowerCase())) {
+        alert('Student ID already registered.');
+        return;
+      }
+
+      students.push({ studentId, name, email, course });
+      localStorage.setItem('students', JSON.stringify(students));
+
+      alert('Student registered successfully!');
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
